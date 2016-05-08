@@ -8,18 +8,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by KasoGG on 2016/5/8.
  */
 public class ApiFactory {
-    public static final String SERVER_URL = "http://gank.io/api";
-    private static Retrofit retrofit;
+    public static final String SERVER_URL = "http://gank.io/api/";
+    private GankApi gankApi;
 
-    private static Retrofit getRetrofit() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder().baseUrl(SERVER_URL).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory
-                    (RxJavaCallAdapterFactory.create()).build();
-        }
-        return retrofit;
+    // @formatter:off
+    private ApiFactory() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(SERVER_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        gankApi = retrofit.create(GankApi.class);
     }
+    // @formatter:on
 
     public static GankApi getGankApi() {
-        return null;
+        return Nested.instance.gankApi;
     }
+
+    static class Nested {
+        private static ApiFactory instance = new ApiFactory();
+    }
+
 }
