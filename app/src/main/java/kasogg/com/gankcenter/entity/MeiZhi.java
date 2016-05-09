@@ -1,11 +1,9 @@
 package kasogg.com.gankcenter.entity;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by KasoGG on 2016/5/8.
  */
-public class MeiZhiData {
+public class Meizhi {
 
     /**
      * _id : 572c146a67765974f885c01e
@@ -19,22 +17,13 @@ public class MeiZhiData {
      * who : 代码家
      */
 
-    @SerializedName("_id")
-    public String id;
-    @SerializedName("createdAt")
+    public String _id;
     public String createdAt;
-    @SerializedName("desc")
     public String desc;
-    @SerializedName("publishedAt")
     public String publishedAt;
-    @SerializedName("source")
     public String source;
-    @SerializedName("type")
     public String type;
-    @SerializedName("url")
     public String url;
-    @SerializedName("used")
     public boolean used;
-    @SerializedName("who")
     public String who;
 }
