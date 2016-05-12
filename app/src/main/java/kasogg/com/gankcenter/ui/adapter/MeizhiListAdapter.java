@@ -26,7 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SizeReadyCallback;
 
 import java.util.List;
 
@@ -57,11 +58,15 @@ public class MeizhiListAdapter extends RecyclerView.Adapter<MeizhiListAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
-        Meizhi item = mDataList.get(position);
-        int limit = 48;
-        String text = item.desc.length() > limit ? item.desc.substring(0, limit) + "..." : item.desc;
-        viewHolder.tv.setText(text);
-        Picasso.with(mContext).load(item.url).into(viewHolder.iv);
+        final Meizhi item = mDataList.get(position);
+        viewHolder.tv.setText(item.desc);
+
+        Glide.with(mContext).load(item.url).centerCrop().into(viewHolder.iv).getSize(new SizeReadyCallback() {
+            @Override
+            public void onSizeReady(int width, int height) {
+                viewHolder.iv.setOriginalSize(width, (int) (width * (Math.random() * 0.5 + 1)));
+            }
+        });
     }
 
     @Override
@@ -83,7 +88,6 @@ public class MeizhiListAdapter extends RecyclerView.Adapter<MeizhiListAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            iv.setOriginalSize(50, 50);
         }
     }
 }

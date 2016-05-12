@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:background="@drawable/bg_card"
               android:orientation="vertical">
 
     <kasogg.com.gankcenter.widget.RatioImageView
         android:id="@+id/iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="center"/>
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="3"/>
 
-</CardView>
+</LinearLayout>

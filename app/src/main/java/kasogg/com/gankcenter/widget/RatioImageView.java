@@ -26,6 +26,7 @@ public class RatioImageView extends ImageView {
     public void setOriginalSize(int originalWidth, int originalHeight) {
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
+        invalidate();
     }
 
     @Override
@@ -35,7 +36,6 @@ public class RatioImageView extends ImageView {
 
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = MeasureSpec.getSize(heightMeasureSpec);
-            // TODO: 现在只支持固定宽度
             if (width > 0) {
                 height = (int) ((float) width / ratio);
             }

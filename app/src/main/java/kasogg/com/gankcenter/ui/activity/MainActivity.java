@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,9 +21,9 @@ import kasogg.com.gankcenter.entity.Meizhi;
 import kasogg.com.gankcenter.entity.MeizhiResult;
 import kasogg.com.gankcenter.ui.adapter.MeizhiListAdapter;
 import kasogg.com.gankcenter.ui.base.BaseToolbarActivity;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -44,6 +45,7 @@ public class MainActivity extends BaseToolbarActivity {
     private void initViews() {
         dialog = ProgressDialog.show(this, null, "加载中");
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new MeizhiListAdapter(this, mDataList);
         mRecyclerView.setAdapter(mAdapter);
@@ -56,7 +58,7 @@ public class MainActivity extends BaseToolbarActivity {
 
     public void getData() {
         dialog.show();
-        ApiFactory.getGankApi().listRepos(10, 1).map(new Func1<MeizhiResult, List<Meizhi>>() {
+        ApiFactory.getGankApi().listRepos(20, 1).map(new Func1<MeizhiResult, List<Meizhi>>() {
             @Override
             public List<Meizhi> call(MeizhiResult meizhiResult) {
                 return meizhiResult.results;
@@ -66,19 +68,22 @@ public class MainActivity extends BaseToolbarActivity {
             public void call() {
                 dialog.dismiss();
             }
-        }).subscribe(new Subscriber<List<Meizhi>>() {
+        }).doOnNext(new Action1<List<Meizhi>>() {
             @Override
-            public void onCompleted() {
+            public void call(List<Meizhi> meizhis) {
+                for (Meizhi meizhi : meizhis) {
+                    Log.i("TAG", meizhi.url);
+                }
             }
-
+        }).subscribe(new Action1<List<Meizhi>>() {
             @Override
-            public void onError(Throwable e) {
+            public void call(List<Meizhi> meizhis) {
+                mAdapter.setAndRefresh(meizhis);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
                 Toast.makeText(getApplicationContext(), "加载失败", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNext(List<Meizhi> meizhi) {
-                mAdapter.setAndRefresh(meizhi);
             }
         });
     }
