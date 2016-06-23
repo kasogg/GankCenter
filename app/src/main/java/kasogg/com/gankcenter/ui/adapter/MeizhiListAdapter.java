@@ -64,7 +64,7 @@ public class MeizhiListAdapter extends RecyclerView.Adapter<MeizhiListAdapter.Vi
         Glide.with(mContext).load(item.url).centerCrop().into(viewHolder.iv).getSize(new SizeReadyCallback() {
             @Override
             public void onSizeReady(int width, int height) {
-                viewHolder.iv.setOriginalSize(width, (int) (width * (Math.random() * 0.5 + 1)));
+                viewHolder.iv.setOriginalSize((int) (height * 0.618), height);
             }
         });
     }
